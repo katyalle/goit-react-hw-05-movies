@@ -5,7 +5,7 @@ import styles from "./single-film.module.css"
 
 const SingleFilm = () => {
     const { id } = useParams();
-    const [post, setMovies] = useState();
+    const [movie, setMovies] = useState();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
