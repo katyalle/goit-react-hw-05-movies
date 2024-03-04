@@ -3,6 +3,7 @@ import HomePage from "Pages/HomaPage/HomePage"
 import MoviePage from "Pages/MoviePage/MoviePage"
 import MainMenu from "./MainMenu/MainMenu"
 import NotFoundPage from "Pages/NotFoundPage/NotFoundPage"
+import SinglePage from "Pages/SinglePage/SinglePage"
 
 function App() {
   return (
@@ -10,9 +11,10 @@ function App() {
       <MainMenu />
       
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/movie" element={<MoviePage />} />
-        <Route path="*" element={<NotFoundPage/>}/>
+        <Route path="pages/:id" element={ <SinglePage/>} />
+        {/* <Route path="*" element={<NotFoundPage/>}/> */}
       </Routes>
     </div>
   )

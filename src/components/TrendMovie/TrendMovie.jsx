@@ -1,58 +1,50 @@
-import { Component } from "react";
-import {getAllMovie} from "../../Api/TrendMovie"
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+import { getAllMovies } from "../../Api/TrendMovie";
 
 
-class TrendMovie extends Component {
-    state = {
-        movie: [],
-        loading: false,
-        error: null,
-    }
-    componentDidMount() {
-this.setState({loading: true})
 
-        getAllMovie()
-            .then(({ data }) => {
-                this.setState({
-                    loading: false,
-                    posts: data?.length ? data: []
-                })
-            })
-            .catch(error => {
-                this.setState({
-                    loading: false,
-                    error: error.message,
-            })
-        })
-}
+const TrendMovie = () => {
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
+    const location = useLocation();
 
-    render() {
-       
-        const { movie, loading, error } = this.state;
-        
-        const elements = movie.map(({ id, title, body }) => <li key={id} >
-                                                            <h3>{title}</h3>
-                                                            <p>{body}</p>
-                                                            </li> );
-                                                                
-        
-        
-        return (
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                setLoading(true);
+                const { data } = await getAllMovies();
+                setMovies(data?.length ? data : []);
+            }
+            catch (error) {
+                setError(error.message);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
 
-            <>
-                {error && <p>{error}</p>}
-                {loading && <p>...Loading</p>}
-                
-             <ul>
+        fetchMovies();
+    }, []);
+
+    const elements = movies.map(({ id, title }) => (<li key={id} >
+                                                        <Link to={`/src/Api/TrendMovie.js/${id}`} state={{from: location}}>{title}</Link>
+                                                    </li>));
+
+    return (
+        <>
+            {error && <p >{error}</p>}
+            {loading && <p>...Loading</p>}
+            {Boolean(elements.length) && (<ol >
                 {elements}
-            </ul>
-            </>
-
-           
-        )
-    }
+            </ol>)}
+        </>
+    )
 }
+
+
 
 export default TrendMovie;
